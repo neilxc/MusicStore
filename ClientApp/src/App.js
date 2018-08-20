@@ -1,20 +1,34 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router';
-import { Layout } from './components/Layout';
+import { Route, Switch } from 'react-router';
 import { Home } from './components/Home';
-import { FetchData } from './components/FetchData';
-import { Counter } from './components/Counter';
+import Login from './components/Login/Login';
+import {createMuiTheme, MuiThemeProvider} from '@material-ui/core';
+import Header from './components/Header/Header';
+import Register from './components/Register/Register';
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      dark: '#0097a7',
+      light: '#bdbdbd',
+      main: '#2196f3'
+  }
+}});
 
 export default class App extends Component {
   displayName = App.name
 
   render() {
     return (
-      <Layout>
-        <Route exact path='/' component={Home} />
-        <Route path='/counter' component={Counter} />
-        <Route path='/fetchdata' component={FetchData} />
-      </Layout>
+      <MuiThemeProvider theme={theme}>
+        <Header/>
+          <Switch>
+            <Route exact path='/' component={Home} />
+            <Route path='/login' component={Login} />
+            <Route path='/register' component={Register} />
+          </Switch>
+      </MuiThemeProvider>
+
     );
   }
 }
