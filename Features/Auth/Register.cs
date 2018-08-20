@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -22,9 +23,27 @@ namespace MusicStore.Features.Auth
             public string Password { get; set; }
         }
 
+        public class UserDataValidator : AbstractValidator<UserData>
+        {
+            public UserDataValidator()
+            {
+                RuleFor(x => x.Email).EmailAddress().NotNull().NotEmpty();
+                RuleFor(x => x.UserName).NotNull().NotEmpty();
+                RuleFor(x => x.Password).NotNull().NotEmpty();
+            }
+        }
+
         public class Command : IRequest<UserEnvelope>
         {
             public UserData User { get; set; }
+        }
+
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {   
+                RuleFor(x => x.User).NotNull().SetValidator(new UserDataValidator());
+            }
         }
 
         public class Handler : IRequestHandler<Command, UserEnvelope>

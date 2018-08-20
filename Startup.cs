@@ -1,4 +1,5 @@
 using AutoMapper;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MusicStore.Data;
 using MusicStore.Data.Seed;
 using MusicStore.Entities;
+using MusicStore.Infrastructure;
 using MusicStore.Infrastructure.Errors;
 using MusicStore.Services;
 using MusicStore.Services.Interfaces;
@@ -46,7 +48,17 @@ namespace MusicStore
             builder.AddRoleManager<RoleManager<IdentityRole>>();
             builder.AddSignInManager<SignInManager<AppUser>>();
             
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc(opt => 
+                {
+                    opt.Filters.Add(typeof(ValidatorActionFilter));
+                })
+                .AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Startup>())
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.Configure<ApiBehaviorOptions>(opt =>
+            {
+                opt.SuppressModelStateInvalidFilter = true;
+            });
             services.AddTransient<Seed>();
             services.AddMediatR();
             services.AddAutoMapper();
