@@ -76,6 +76,8 @@ namespace MusicStore
         {
             app.UseMiddleware<ErrorHandlingMiddleware>();
 
+            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
