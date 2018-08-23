@@ -63,6 +63,7 @@ namespace MusicStore
             services.AddMediatR();
             services.AddAutoMapper();
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+            services.AddCors();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

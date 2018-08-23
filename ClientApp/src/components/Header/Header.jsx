@@ -3,7 +3,7 @@ import {Menu as MenuIcon, AccountCircle }from '@material-ui/icons';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const styles = {
+const styles = theme => ({
   root: {
     flexGrow: 1
   },
@@ -13,8 +13,12 @@ const styles = {
   menuButton: {
     marginLeft: -12,
     marginRight: 20
-  }
-};
+  },
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1
+  },
+  toolbar: theme.mixins.toolbar
+});
 
 class Header extends React.Component {
   state = {
@@ -53,7 +57,7 @@ class Header extends React.Component {
             label={auth ? 'Logout' : 'Login'}
           />
         </FormGroup>
-        <AppBar position="static">
+        <AppBar position="absolute" className={classes.appBar}>
           <Toolbar>
             <IconButton
               className={classes.menuButton}
