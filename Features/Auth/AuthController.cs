@@ -1,6 +1,8 @@
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MusicStore.Services.Interfaces;
 
 namespace MusicStore.Features.Auth
 {
@@ -9,9 +11,22 @@ namespace MusicStore.Features.Auth
     public class AuthController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public AuthController(IMediator mediator)
+        private readonly ICurrentUserAccessor _currentUserAccessor;
+
+        public AuthController(IMediator mediator, ICurrentUserAccessor currentUserAccessor)
         {
             _mediator = mediator;
+            _currentUserAccessor = currentUserAccessor;
+        }
+
+        [Authorize]
+        [HttpGet("user")]
+        public async Task<UserEnvelope> GetCurrent()
+        {
+            return await _mediator.Send(new Details.Query()
+            {
+                UserName = _currentUserAccessor.GetCurrentUsername()
+            });
         }
 
         [HttpPost("register")]

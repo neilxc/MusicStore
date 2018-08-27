@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
-import { Grid, Card } from 'semantic-ui-react';
+import { Grid, Card, Header } from 'semantic-ui-react';
 import Sidebar from './Sidebar';
 import Filters from './Filters';
 import AlbumItem from './AlbumItem';
 
 export default class Albums extends Component {
   state = {
-    albums: []
+    albums: [],
+    count: 0 
   }
 
   componentWillMount() {
@@ -19,15 +20,20 @@ export default class Albums extends Component {
       return response.json();
     }).then((r) => {
       this.setState({
-        albums: r.albums
+        albums: r.albums,
+        count: r.albumsCount
       })
     })
   }
 
   render() {
-    const {albums} = this.state;
+    const {albums, count} = this.state;
     return (
       <Grid>
+        <Grid.Column width={16}>
+          <Header as='h1'>All Albums</Header>
+          <Header as='h4'>Showing 20 of {count} results</Header>
+        </Grid.Column>
         <Grid.Column width={3}>
             <Sidebar/>
         </Grid.Column>

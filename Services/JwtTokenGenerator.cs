@@ -28,7 +28,7 @@ namespace MusicStore.Services
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.NameIdentifier, user.UserName),
             };
 
             var roles = await _userManager.GetRolesAsync(user);
